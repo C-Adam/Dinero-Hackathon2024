@@ -1,1 +1,1 @@
-print("Hello world, from client!")
+local local_player = game.Players.LocalPlayer
