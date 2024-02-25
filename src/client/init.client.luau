@@ -27,8 +27,10 @@ local section_4 = scrolling_frame.Section4
 local weight_input_box = section_4.WeightBox
 local earning_label = section_4.EarningLabel
 
+local pause_time = 3.5
+
 --Section 1 Functions (Ex. Moving scroll frame when "Get Price Quote" is clicked)
-local scroll_position = Vector2.new(0,2000)
+local scroll_position = Vector2.new(0, 3000)
 local scroll_time = .35
 
 for _, gui_element in scrolling_frame:GetChildren() do --Function that makes every back button on each page close the open page.
@@ -86,13 +88,13 @@ find_location_frame.PingButton.Activated:Connect(function()
     TweenService:Create(main_pointer, TweenInfo.new(.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = grown_size}):Play()
     main_pointer.ImageColor3 = Color3.fromRGB(255, 255, 0)
 
-    task.wait(3.5)
+    task.wait(pause_time)
 
     TweenService:Create(main_pointer, TweenInfo.new(.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = original_size}):Play()
     main_pointer.ImageColor3 = Color3.fromRGB(85, 255, 0)
 end)
 
---Buy A Container Page Functions
+--"Buy A Container" Page Functions
 local bin_check = buy_container_frame.BinCheck
 local station_check = buy_container_frame.StationCheck
 local item_price_label = buy_container_frame.ItemPriceLabel
@@ -102,6 +104,7 @@ local v_station_body_frame = buy_container_frame.VStationBodyFrame
 local purchase_button = buy_container_frame.PurchaseButton
 local pay_frame = buy_container_frame.PayFrame
 local thank_frame = buy_container_frame.ThankFrame
+local back_button2 = pay_frame.BackButton2
 
 local say_joke = true
 
@@ -129,6 +132,20 @@ for _, ui_elemnt in buy_container_frame:GetChildren() do
     end)
 end
 
+local function FillInformation(bool)
+    if bool then
+        pay_frame.NameBox.Text = "Ayradeep Ray"
+        pay_frame.NumberBox.Text = "************5236"
+        pay_frame.DateBox.Text = "**/**"
+        pay_frame.CodeBox.Text = "***"
+    else
+        pay_frame.NameBox.Text = ""
+        pay_frame.NumberBox.Text = ""
+        pay_frame.DateBox.Text = ""
+        pay_frame.CodeBox.Text = ""
+    end
+end
+
 bin_check.Activated:Connect(function()
     bin_check.ImageTransparency = 0
     station_check.ImageTransparency = 1
@@ -147,19 +164,10 @@ purchase_button.Activated:Connect(function()
     pay_frame.Visible = true
 end)
 
-local function FillInformation(bool)
-    if bool then
-        pay_frame.NameBox.Text = "Ayradeep Ray"
-        pay_frame.NumberBox.Text = "************5236"
-        pay_frame.DateBox.Text = "**/**"
-        pay_frame.CodeBox.Text = "***"
-    else
-        pay_frame.NameBox.Text = ""
-        pay_frame.NumberBox.Text = ""
-        pay_frame.DateBox.Text = ""
-        pay_frame.CodeBox.Text = ""
-    end
-end
+back_button2.Activated:Connect(function()
+    pay_frame.Visible = false
+    FillInformation(false)
+end)
 
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
@@ -195,4 +203,42 @@ thank_frame.ReButton.Activated:Connect(function()
         thank_frame.Visible = false
     end
     FillInformation(false)
+end)
+
+--Functions for the "Buy Glass" Page
+local policy_check = buy_glass_frame.PolicyCheck
+local submit_button = buy_glass_frame.SubmitButton
+local error_label = buy_glass_frame.ErrorLabel
+local thank_frame_2 = buy_glass_frame.ThankFrame2
+local return_button = thank_frame_2.ReturnButton
+
+local is_checked = false
+
+policy_check.Activated:Connect(function()
+    if not is_checked then
+        policy_check.ImageTransparency = 0
+        is_checked = true
+    else
+        policy_check.ImageTransparency = 1
+        is_checked = false
+    end
+end)
+
+submit_button.Activated:Connect(function()
+    if not is_checked then
+        error_label.Visible = true
+        task.wait(pause_time)
+        error_label.Visible = false
+    else
+        Scroll(Vector2.new(0, 175))
+        thank_frame_2.Visible = true
+    end
+end)
+
+return_button.Activated:Connect(function()
+    thank_frame_2.Visible = false
+    for _, text_box in buy_glass_frame:GetChildren() do
+        if not text_box:IsA("TextBox") then continue end
+        text_box.Text = ""
+    end
 end)
