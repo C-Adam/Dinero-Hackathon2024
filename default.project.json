@@ -5,10 +5,10 @@
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": {
+        "Client":{
           "$path": "src/client"
         }
-      }
+      } 
     },
 
     "Workspace": {
